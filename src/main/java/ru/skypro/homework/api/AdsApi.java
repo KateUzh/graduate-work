@@ -59,6 +59,7 @@ public interface AdsApi {
             @ApiResponse(responseCode = "401", description = "Unauthorized")
         }
     )
+
     @RequestMapping(
         method = RequestMethod.POST,
         value = AdsApi.PATH_ADD_AD,
