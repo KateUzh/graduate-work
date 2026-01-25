@@ -5,7 +5,13 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.model.*;
+import ru.skypro.homework.model.Ad;
+import ru.skypro.homework.model.Ads;
+import ru.skypro.homework.model.Comment;
+import ru.skypro.homework.model.Comments;
+import ru.skypro.homework.model.CreateOrUpdateAd;
+import ru.skypro.homework.model.CreateOrUpdateComment;
+import ru.skypro.homework.model.ExtendedAd;
 
 import javax.annotation.Generated;
 import java.util.List;
