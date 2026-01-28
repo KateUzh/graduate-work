@@ -3,6 +3,7 @@ package ru.skypro.homework.api;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.model.Ad;
@@ -38,7 +39,7 @@ public interface AdsApiDelegate {
      * @see AdsApi#addAd
      */
     default ResponseEntity<Ad> addAd(CreateOrUpdateAd properties,
-        MultipartFile image) {
+                                     MultipartFile image, Authentication authentication) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {

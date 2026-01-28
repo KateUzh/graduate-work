@@ -29,6 +29,9 @@ public class AdEntity {
     @Column(nullable = false)
     private String description;
 
+    @Column(nullable = false)
+    private String image;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id", nullable = false)
     private UserEntity author;
@@ -50,6 +53,14 @@ public class AdEntity {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public Integer getPrice() {

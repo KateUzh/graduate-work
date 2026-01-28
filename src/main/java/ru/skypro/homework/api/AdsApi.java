@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -69,9 +70,10 @@ public interface AdsApi {
     
     default ResponseEntity<Ad> addAd(
         @Parameter(name = "properties", description = "", required = true) @Valid @RequestPart(value = "properties", required = true) CreateOrUpdateAd properties,
-        @Parameter(name = "image", description = "", required = true) @RequestPart(value = "image", required = true) MultipartFile image
+        @Parameter(name = "image", description = "", required = true) @RequestPart(value = "image", required = true) MultipartFile image,
+        Authentication auth
     ) {
-        return getDelegate().addAd(properties, image);
+        return getDelegate().addAd(properties, image, auth);
     }
 
 

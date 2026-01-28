@@ -8,7 +8,8 @@ import ru.skypro.homework.model.Comment;
 
 @Mapper(
         componentModel = "spring",
-        unmappedTargetPolicy = ReportingPolicy.IGNORE
+        unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        uses = UserMapper.class
 )
 public interface CommentMapper {
 
