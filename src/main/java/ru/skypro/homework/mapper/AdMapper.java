@@ -6,6 +6,7 @@ import org.mapstruct.ReportingPolicy;
 import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.model.Ad;
 import ru.skypro.homework.model.CreateOrUpdateAd;
+import ru.skypro.homework.model.ExtendedAd;
 
 @Mapper(
         componentModel = "spring",
@@ -20,6 +21,8 @@ public interface AdMapper {
     AdEntity toEntity(Ad dto);
 
     AdEntity toAdEntity(CreateOrUpdateAd createOrUpdateAd);
+
+    ExtendedAd toExtendedAd(AdEntity ad);
 }
 
 

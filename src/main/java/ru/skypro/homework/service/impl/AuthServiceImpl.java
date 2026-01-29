@@ -40,7 +40,11 @@ public class AuthServiceImpl implements AuthService {
         user.setLastName(register.getLastName());
         user.setEmail(register.getUsername());
         user.setPhone(register.getPhone());
-        user.setRole(register.getRole());
+        try {
+            user.setRole(UserEntity.Role.valueOf(register.getRole().name()));
+        } catch (IllegalArgumentException e){
+            throw new IllegalArgumentException("Unknown role: " + register.getRole());
+        }
 
         userRepository.save(user);
         return true;

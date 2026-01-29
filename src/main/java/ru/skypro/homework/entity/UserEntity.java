@@ -3,7 +3,6 @@ package ru.skypro.homework.entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
-import ru.skypro.homework.model.Register;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -44,7 +43,7 @@ public class UserEntity {
     private String phone;
 
     @Enumerated(EnumType.STRING)
-    private Register.RoleEnum role;
+    private Role role;
 
     @Column(length = 255)
     private String image;
@@ -103,11 +102,11 @@ public class UserEntity {
         this.phone = phone;
     }
 
-    public Register.RoleEnum getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(Register.RoleEnum role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 

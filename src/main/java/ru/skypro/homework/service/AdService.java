@@ -1,18 +1,17 @@
 package ru.skypro.homework.service;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.model.Ad;
+import ru.skypro.homework.model.Ads;
 import ru.skypro.homework.model.CreateOrUpdateAd;
-
-import java.util.List;
+import ru.skypro.homework.model.ExtendedAd;
 
 public interface AdService {
 
-    ResponseEntity<Ad> createAd(CreateOrUpdateAd properties, MultipartFile image, Authentication auth);
+    Ad createAd(CreateOrUpdateAd properties, MultipartFile image, Authentication auth);
 
-    List<Ad> getAllAds();
+    Ads getAllAds();
 
-    Ad getAd(Integer id);
+    ExtendedAd getAd(Integer id);
 }

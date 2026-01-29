@@ -24,4 +24,15 @@ public interface UserMapper {
 
     @Mapping(source = "role", target = "role")
     User toDto(UserEntity entity);
+
+    @Mapping(source = "role", target = "role")
+    UserEntity toEntity(User dto);
+
+    default UserEntity.Role map(User.RoleEnum roleEnum) {
+        return roleEnum == null ? null : UserEntity.Role.valueOf(roleEnum.name());
+    }
+
+    default User.RoleEnum map(UserEntity.Role role) {
+        return role == null ? null : User.RoleEnum.valueOf(role.name());
+    }
 }

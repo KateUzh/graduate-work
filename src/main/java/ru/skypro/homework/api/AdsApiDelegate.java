@@ -32,16 +32,16 @@ public interface AdsApiDelegate {
     /**
      * POST /ads : Добавление объявления
      *
-     * @param properties  (required)
-     * @param image  (required)
+     * @param properties (required)
+     * @param image      (required)
      * @return Created (status code 201)
-     *         or Unauthorized (status code 401)
+     * or Unauthorized (status code 401)
      * @see AdsApi#addAd
      */
     default ResponseEntity<Ad> addAd(CreateOrUpdateAd properties,
                                      MultipartFile image, Authentication authentication) {
         getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+            for (MediaType mediaType : MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
                     String exampleString = "{ \"image\" : \"image\", \"author\" : 6, \"price\" : 5, \"pk\" : 1, \"title\" : \"title\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
@@ -56,17 +56,17 @@ public interface AdsApiDelegate {
     /**
      * POST /ads/{id}/comments : Добавление комментария к объявлению
      *
-     * @param id  (required)
-     * @param createOrUpdateComment  (optional)
+     * @param id                    (required)
+     * @param createOrUpdateComment (optional)
      * @return OK (status code 200)
-     *         or Unauthorized (status code 401)
-     *         or Not found (status code 404)
+     * or Unauthorized (status code 401)
+     * or Not found (status code 404)
      * @see AdsApi#addComment
      */
     default ResponseEntity<Comment> addComment(Integer id,
-        CreateOrUpdateComment createOrUpdateComment) {
+                                               CreateOrUpdateComment createOrUpdateComment, Authentication authentication) {
         getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+            for (MediaType mediaType : MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
                     String exampleString = "{ \"createdAt\" : 1, \"authorFirstName\" : \"authorFirstName\", \"author\" : 6, \"authorImage\" : \"authorImage\", \"pk\" : 5, \"text\" : \"text\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
@@ -81,16 +81,16 @@ public interface AdsApiDelegate {
     /**
      * DELETE /ads/{adId}/comments/{commentId} : Удаление комментария
      *
-     * @param adId  (required)
-     * @param commentId  (required)
+     * @param adId      (required)
+     * @param commentId (required)
      * @return OK (status code 200)
-     *         or Forbidden (status code 403)
-     *         or Unauthorized (status code 401)
-     *         or Not found (status code 404)
+     * or Forbidden (status code 403)
+     * or Unauthorized (status code 401)
+     * or Not found (status code 404)
      * @see AdsApi#deleteComment
      */
     default ResponseEntity<Void> deleteComment(Integer adId,
-        Integer commentId) {
+                                               Integer commentId, Authentication authentication) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }
@@ -98,15 +98,15 @@ public interface AdsApiDelegate {
     /**
      * GET /ads/{id} : Получение информации об объявлении
      *
-     * @param id  (required)
+     * @param id (required)
      * @return OK (status code 200)
-     *         or Unauthorized (status code 401)
-     *         or Not found (status code 404)
+     * or Unauthorized (status code 401)
+     * or Not found (status code 404)
      * @see AdsApi#getAds
      */
     default ResponseEntity<ExtendedAd> getAds(Integer id) {
         getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+            for (MediaType mediaType : MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
                     String exampleString = "{ \"image\" : \"image\", \"authorLastName\" : \"authorLastName\", \"authorFirstName\" : \"authorFirstName\", \"phone\" : \"phone\", \"price\" : 6, \"description\" : \"description\", \"pk\" : 0, \"title\" : \"title\", \"email\" : \"email\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
@@ -122,12 +122,12 @@ public interface AdsApiDelegate {
      * GET /ads/me : Получение объявлений авторизованного пользователя
      *
      * @return OK (status code 200)
-     *         or Unauthorized (status code 401)
+     * or Unauthorized (status code 401)
      * @see AdsApi#getAdsMe
      */
-    default ResponseEntity<Ads> getAdsMe() {
+    default ResponseEntity<Ads> getAdsMe(Authentication authentication) {
         getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+            for (MediaType mediaType : MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
                     String exampleString = "{ \"count\" : 0, \"results\" : [ { \"image\" : \"image\", \"author\" : 6, \"price\" : 5, \"pk\" : 1, \"title\" : \"title\" }, { \"image\" : \"image\", \"author\" : 6, \"price\" : 5, \"pk\" : 1, \"title\" : \"title\" } ] }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
@@ -147,7 +147,7 @@ public interface AdsApiDelegate {
      */
     default ResponseEntity<Ads> getAllAds() {
         getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+            for (MediaType mediaType : MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
                     String exampleString = "{ \"count\" : 0, \"results\" : [ { \"image\" : \"image\", \"author\" : 6, \"price\" : 5, \"pk\" : 1, \"title\" : \"title\" }, { \"image\" : \"image\", \"author\" : 6, \"price\" : 5, \"pk\" : 1, \"title\" : \"title\" } ] }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
@@ -162,15 +162,15 @@ public interface AdsApiDelegate {
     /**
      * GET /ads/{id}/comments : Получение комментариев объявления
      *
-     * @param id  (required)
+     * @param id (required)
      * @return OK (status code 200)
-     *         or Unauthorized (status code 401)
-     *         or Not found (status code 404)
+     * or Unauthorized (status code 401)
+     * or Not found (status code 404)
      * @see AdsApi#getComments
      */
     default ResponseEntity<Comments> getComments(Integer id) {
         getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+            for (MediaType mediaType : MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
                     String exampleString = "{ \"count\" : 0, \"results\" : [ { \"createdAt\" : 1, \"authorFirstName\" : \"authorFirstName\", \"author\" : 6, \"authorImage\" : \"authorImage\", \"pk\" : 5, \"text\" : \"text\" }, { \"createdAt\" : 1, \"authorFirstName\" : \"authorFirstName\", \"author\" : 6, \"authorImage\" : \"authorImage\", \"pk\" : 5, \"text\" : \"text\" } ] }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
@@ -185,14 +185,14 @@ public interface AdsApiDelegate {
     /**
      * DELETE /ads/{id} : Удаление объявления
      *
-     * @param id  (required)
+     * @param id (required)
      * @return No Content (status code 204)
-     *         or Unauthorized (status code 401)
-     *         or Forbidden (status code 403)
-     *         or Not found (status code 404)
+     * or Unauthorized (status code 401)
+     * or Forbidden (status code 403)
+     * or Not found (status code 404)
      * @see AdsApi#removeAd
      */
-    default ResponseEntity<Void> removeAd(Integer id) {
+    default ResponseEntity<Void> removeAd(Integer id, Authentication authentication) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }
@@ -200,18 +200,18 @@ public interface AdsApiDelegate {
     /**
      * PATCH /ads/{id} : Обновление информации об объявлении
      *
-     * @param id  (required)
-     * @param createOrUpdateAd  (optional)
+     * @param id               (required)
+     * @param createOrUpdateAd (optional)
      * @return OK (status code 200)
-     *         or Forbidden (status code 403)
-     *         or Unauthorized (status code 401)
-     *         or Not found (status code 404)
+     * or Forbidden (status code 403)
+     * or Unauthorized (status code 401)
+     * or Not found (status code 404)
      * @see AdsApi#updateAds
      */
     default ResponseEntity<Ad> updateAds(Integer id,
-        CreateOrUpdateAd createOrUpdateAd) {
+                                         CreateOrUpdateAd createOrUpdateAd, Authentication authentication) {
         getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+            for (MediaType mediaType : MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
                     String exampleString = "{ \"image\" : \"image\", \"author\" : 6, \"price\" : 5, \"pk\" : 1, \"title\" : \"title\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
@@ -226,20 +226,20 @@ public interface AdsApiDelegate {
     /**
      * PATCH /ads/{adId}/comments/{commentId} : Обновление комментария
      *
-     * @param adId  (required)
-     * @param commentId  (required)
-     * @param createOrUpdateComment  (optional)
+     * @param adId                  (required)
+     * @param commentId             (required)
+     * @param createOrUpdateComment (optional)
      * @return OK (status code 200)
-     *         or Forbidden (status code 403)
-     *         or Unauthorized (status code 401)
-     *         or Not found (status code 404)
+     * or Forbidden (status code 403)
+     * or Unauthorized (status code 401)
+     * or Not found (status code 404)
      * @see AdsApi#updateComment
      */
     default ResponseEntity<Comment> updateComment(Integer adId,
-        Integer commentId,
-        CreateOrUpdateComment createOrUpdateComment) {
+                                                  Integer commentId,
+                                                  CreateOrUpdateComment createOrUpdateComment, Authentication authentication) {
         getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+            for (MediaType mediaType : MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
                     String exampleString = "{ \"createdAt\" : 1, \"authorFirstName\" : \"authorFirstName\", \"author\" : 6, \"authorImage\" : \"authorImage\", \"pk\" : 5, \"text\" : \"text\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
@@ -254,18 +254,18 @@ public interface AdsApiDelegate {
     /**
      * PATCH /ads/{id}/image : Обновление картинки объявления
      *
-     * @param id  (required)
-     * @param image  (required)
+     * @param id    (required)
+     * @param image (required)
      * @return OK (status code 200)
-     *         or Forbidden (status code 403)
-     *         or Unauthorized (status code 401)
-     *         or Not found (status code 404)
+     * or Forbidden (status code 403)
+     * or Unauthorized (status code 401)
+     * or Not found (status code 404)
      * @see AdsApi#updateImage
      */
     default ResponseEntity<List<byte[]>> updateImage(Integer id,
-        MultipartFile image) {
+                                                     MultipartFile image, Authentication authentication) {
         getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+            for (MediaType mediaType : MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf(""))) {
                     String exampleString = "";
                     ApiUtil.setExampleResponse(request, "", exampleString);
