@@ -2,17 +2,14 @@ package ru.skypro.homework.api;
 
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.model.Ad;
@@ -24,6 +21,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin(value = "http://localhost:3000")
 @RestController
 public class AdssController {
 
@@ -34,7 +32,8 @@ public class AdssController {
 
     public AdssController(AdsApiDelegateImpl delegate, AdServiceImpl adService, CommentServiceImpl commentService) {
         this.commentService = commentService;
-        this.delegate = Optional.ofNullable(delegate).orElse(new AdsApiDelegateImpl(adService, commentService) {});
+        this.delegate = Optional.ofNullable(delegate).orElse(new AdsApiDelegateImpl(adService, commentService) {
+        });
         this.adService = adService;
     }
 
@@ -48,7 +47,7 @@ public class AdssController {
             @NotNull @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH) @PathVariable("id") Integer id,
             @Parameter(name = "image", description = "", required = true) @RequestParam("image") MultipartFile image,
             Authentication auth
-    ){
+    ) {
         return delegate.updateImage(id, image, auth);
     }
 }

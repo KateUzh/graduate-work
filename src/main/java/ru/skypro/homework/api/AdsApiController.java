@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,6 +23,7 @@ import javax.annotation.Generated;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin(value = "http://localhost:3000")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2026-01-22T22:29:14.541627300+03:00[Europe/Moscow]", comments = "Generator version: 7.16.0")
 @Controller
 @RequestMapping("${openapi.aPIDocumentation.base-path:}")
@@ -43,9 +45,9 @@ public class AdsApiController implements AdsApi {
         return delegate;
     }
 
-    @PostMapping(value = "/adss", consumes = "multipart/form-data")
-    public ResponseEntity<Ad> addAd(@RequestParam("image") MultipartFile image, Authentication auth) {
-        return delegate.addAd(new CreateOrUpdateAd(), image, auth);
+    @PostMapping(value = "/ads", consumes = "multipart/form-data")
+    public ResponseEntity<Ad> addAd(CreateOrUpdateAd properties, @RequestParam("image") MultipartFile image, Authentication auth) {
+        return delegate.addAd(properties, image, auth);
     }
 
     @Override

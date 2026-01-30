@@ -8,14 +8,17 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.model.Ad;
@@ -70,10 +73,10 @@ public interface AdsApi {
             consumes = {"multipart/form-data"}
     )
 
-    default ResponseEntity<Ad> addAd(
-            @Parameter(name = "properties", description = "", required = true) @Valid @RequestPart(value = "properties", required = true) CreateOrUpdateAd properties,
-            @Parameter(name = "image", description = "", required = true) @RequestPart(value = "image", required = true) MultipartFile image,
-            Authentication auth
+
+    default ResponseEntity<Ad> addAd(@Parameter(name = "properties", description = "", required = true) @Valid @RequestPart(value = "properties", required = true) CreateOrUpdateAd properties,
+                                     @Parameter(name = "image", description = "", required = true) @RequestPart(value = "image", required = true) MultipartFile image,
+                                     Authentication auth
     ) {
         return getDelegate().addAd(properties, image, auth);
     }
@@ -430,19 +433,14 @@ public interface AdsApi {
                     @ApiResponse(responseCode = "404", description = "Not found")
             }
     )
-    @RequestMapping(
-            method = RequestMethod.PATCH,
-            value = AdsApi.PATH_UPDATE_IMAGE,
-            produces = {"application/octet-stream"},
-            consumes = {"multipart/form-data"}
-    )
 
+    @PatchMapping(value = AdsApi.PATH_UPDATE_IMAGE, consumes = "multipart/form-data", produces = MediaType.APPLICATION_JSON_VALUE)
     default ResponseEntity<List<byte[]>> updateImage(
             @NotNull @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH) @PathVariable("id") Integer id,
-            @Parameter(name = "image", description = "", required = true) @RequestPart(value = "image", required = true) MultipartFile image,
-            Authentication authentication
+            @Parameter(name = "image", description = "", required = true) @RequestParam("image") MultipartFile image,
+            Authentication auth
     ) {
-        return getDelegate().updateImage(id, image, authentication);
+        return getDelegate().updateImage(id, image, auth);
     }
 
 }
