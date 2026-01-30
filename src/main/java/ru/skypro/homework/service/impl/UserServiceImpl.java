@@ -3,8 +3,10 @@ package ru.skypro.homework.service.impl;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.mapper.UserMapper;
+import ru.skypro.homework.model.NewPassword;
 import ru.skypro.homework.model.UpdateUser;
 import ru.skypro.homework.model.User;
 import ru.skypro.homework.repository.UserRepository;
@@ -47,5 +49,13 @@ public class UserServiceImpl implements UserService {
         userMapper.updateFromDto(updateUser, user);
 
         return userMapper.toDto(userRepository.save(user));
+    }
+
+    public void changePassword(NewPassword newPassword){
+
+    }
+
+    public void updateImage(MultipartFile image) {
+
     }
 }

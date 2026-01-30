@@ -5,10 +5,12 @@ import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 import ru.skypro.homework.entity.CommentEntity;
 import ru.skypro.homework.model.Comment;
+import ru.skypro.homework.model.CreateOrUpdateComment;
 
 @Mapper(
         componentModel = "spring",
-        unmappedTargetPolicy = ReportingPolicy.IGNORE
+        unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        uses = UserMapper.class
 )
 public interface CommentMapper {
 
@@ -17,4 +19,9 @@ public interface CommentMapper {
     @Mapping(source = "author.firstName", target = "authorFirstName")
     @Mapping(source = "author.image", target = "authorImage")
     Comment toDto(CommentEntity entity);
+
+    @Mapping(source = "author", target = "author.id")
+    CommentEntity toEntityFromComment(Comment dto);
+
+    CommentEntity toEntityFromCreateOrUpdateComment(CreateOrUpdateComment dto);
 }
