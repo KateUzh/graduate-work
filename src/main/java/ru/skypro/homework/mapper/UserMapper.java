@@ -5,9 +5,9 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 import ru.skypro.homework.entity.UserEntity;
-import ru.skypro.homework.model.Register;
-import ru.skypro.homework.model.UpdateUser;
-import ru.skypro.homework.model.User;
+import ru.skypro.homework.dto.Register;
+import ru.skypro.homework.dto.UpdateUser;
+import ru.skypro.homework.dto.User;
 
 @Mapper(
         componentModel = "spring",

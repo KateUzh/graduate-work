@@ -1,7 +1,7 @@
 package ru.skypro.homework.service;
 
-import ru.skypro.homework.model.Login;
-import ru.skypro.homework.model.Register;
+import ru.skypro.homework.dto.Login;
+import ru.skypro.homework.dto.Register;
 
 public interface AuthService {
     boolean login(Login login);
