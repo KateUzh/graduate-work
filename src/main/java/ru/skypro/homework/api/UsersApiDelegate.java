@@ -3,6 +3,7 @@ package ru.skypro.homework.api;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.model.NewPassword;
@@ -27,12 +28,12 @@ public interface UsersApiDelegate {
      * GET /users/me : Получение информации об авторизованном пользователе
      *
      * @return OK (status code 200)
-     *         or Unauthorized (status code 401)
+     * or Unauthorized (status code 401)
      * @see UsersApi#getUser
      */
     default ResponseEntity<User> getUser() {
         getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+            for (MediaType mediaType : MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
                     String exampleString = "{ \"firstName\" : \"firstName\", \"lastName\" : \"lastName\", \"image\" : \"image\", \"role\" : \"USER\", \"phone\" : \"phone\", \"id\" : 0, \"email\" : \"email\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
@@ -47,13 +48,13 @@ public interface UsersApiDelegate {
     /**
      * POST /users/set_password : Обновление пароля
      *
-     * @param newPassword  (optional)
+     * @param newPassword (optional)
      * @return OK (status code 200)
-     *         or Unauthorized (status code 401)
-     *         or Forbidden (status code 403)
+     * or Unauthorized (status code 401)
+     * or Forbidden (status code 403)
      * @see UsersApi#setPassword
      */
-    default ResponseEntity<Void> setPassword(NewPassword newPassword) {
+    default ResponseEntity<Void> setPassword(NewPassword newPassword, Authentication authentication) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }
@@ -61,14 +62,14 @@ public interface UsersApiDelegate {
     /**
      * PATCH /users/me : Обновление информации об авторизованном пользователе
      *
-     * @param updateUser  (optional)
+     * @param updateUser (optional)
      * @return OK (status code 200)
-     *         or Unauthorized (status code 401)
+     * or Unauthorized (status code 401)
      * @see UsersApi#updateUser
      */
     default ResponseEntity<UpdateUser> updateUser(UpdateUser updateUser) {
         getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+            for (MediaType mediaType : MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
                     String exampleString = "{ \"firstName\" : \"firstName\", \"lastName\" : \"lastName\", \"phone\" : \"phone\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
@@ -83,9 +84,9 @@ public interface UsersApiDelegate {
     /**
      * PATCH /users/me/image : Обновление аватара авторизованного пользователя
      *
-     * @param image  (required)
+     * @param image (required)
      * @return OK (status code 200)
-     *         or Unauthorized (status code 401)
+     * or Unauthorized (status code 401)
      * @see UsersApi#updateUserImage
      */
     default ResponseEntity<Void> updateUserImage(MultipartFile image) {

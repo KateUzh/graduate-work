@@ -2,6 +2,7 @@ package ru.skypro.homework.api;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.model.NewPassword;
@@ -21,8 +22,8 @@ public class UsersApiDelegateApiImpl implements UsersApiDelegate {
     }
 
     @Override
-    public ResponseEntity<Void> setPassword(NewPassword newPassword) {
-        userService.changePassword(newPassword);
+    public ResponseEntity<Void> setPassword(NewPassword newPassword, Authentication auth) {
+        userService.changePassword(newPassword, auth);
         return ResponseEntity.ok().build();
     }
 

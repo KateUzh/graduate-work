@@ -87,7 +87,9 @@ public class AdServiceImpl implements AdService {
 
     public Ads getMyAds(Authentication auth) {
         UserEntity user = getUserFromAuth(auth);
-        if (user == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
 
         List<AdEntity> allByAuthorId = adRepository.findAllByAuthorId(user.getId());
         List<Ad> adsList = allByAuthorId.stream()
@@ -103,10 +105,12 @@ public class AdServiceImpl implements AdService {
 
     public void removeAd(Integer id, Authentication auth) {
         UserEntity user = getUserFromAuth(auth);
-        if (user == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
 
         AdEntity adEntity = adRepository.findById(id).orElseThrow(NullPointerException::new);
-        if (!UserEntity.Role.ADMIN.equals(user.getRole()) && !adEntity.getAuthor().getId().equals(user.getId())) {
+        if (!UserEntity.Role.ADMIN.equals(user.getRole()) || !adEntity.getAuthor().getId().equals(user.getId())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
         adRepository.deleteById(id);
@@ -114,11 +118,13 @@ public class AdServiceImpl implements AdService {
 
     public Ad updateAds(Integer id, CreateOrUpdateAd createOrUpdateAd, Authentication auth) {
         UserEntity user = getUserFromAuth(auth);
-        if (user == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
 
         AdEntity adEntity = adRepository.findById(id).orElseThrow(NullPointerException::new);
 
-        if (!UserEntity.Role.ADMIN.equals(user.getRole()) && !adEntity.getAuthor().getId().equals(user.getId())) {
+        if (!UserEntity.Role.ADMIN.equals(user.getRole()) || !adEntity.getAuthor().getId().equals(user.getId())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
         adEntity.setTitle(createOrUpdateAd.getTitle());
@@ -131,11 +137,13 @@ public class AdServiceImpl implements AdService {
 
     public List<byte[]> updateImage(Integer id, MultipartFile imageFile, Authentication auth) {
         UserEntity user = getUserFromAuth(auth);
-        if (user == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
 
         AdEntity adEntity = adRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        if (!UserEntity.Role.ADMIN.equals(user.getRole()) && !adEntity.getAuthor().getId().equals(user.getId())) {
+        if (!UserEntity.Role.ADMIN.equals(user.getRole()) || !adEntity.getAuthor().getId().equals(user.getId())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
 

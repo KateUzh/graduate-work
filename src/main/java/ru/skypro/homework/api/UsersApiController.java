@@ -17,7 +17,8 @@ public class UsersApiController implements UsersApi {
     private final UsersApiDelegate delegate;
 
     public UsersApiController(@Autowired(required = false) UsersApiDelegate delegate) {
-        this.delegate = Optional.ofNullable(delegate).orElse(new UsersApiDelegate() {});
+        this.delegate = Optional.ofNullable(delegate).orElse(new UsersApiDelegate() {
+        });
     }
 
     @Override
