@@ -15,6 +15,7 @@ import ru.skypro.homework.model.ExtendedAd;
 public interface AdMapper {
 
     @Mapping(source = "author.id", target = "author")
+    @Mapping(source = "id", target = "pk")
     Ad toDto(AdEntity entity);
 
     @Mapping(source = "author", target = "author.id")

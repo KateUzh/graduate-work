@@ -17,113 +17,117 @@ import java.util.Objects;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2026-01-22T22:29:14.541627300+03:00[Europe/Moscow]", comments = "Generator version: 7.16.0")
 public class CreateOrUpdateAd {
 
-  private @Nullable String title;
+    private @Nullable String title;
 
-  private @Nullable Integer price;
+    private @Nullable Integer price;
 
-  private @Nullable String description;
+    private @Nullable String description;
 
-  public CreateOrUpdateAd title(@Nullable String title) {
-    this.title = title;
-    return this;
-  }
-
-  /**
-   * заголовок объявления
-   * @return title
-   */
-  @Size(min = 4, max = 32) 
-  @Schema(name = "title", description = "заголовок объявления", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("title")
-  public @Nullable String getTitle() {
-    return title;
-  }
-
-  public void setTitle(@Nullable String title) {
-    this.title = title;
-  }
-
-  public CreateOrUpdateAd price(@Nullable Integer price) {
-    this.price = price;
-    return this;
-  }
-
-  /**
-   * цена объявления
-   * minimum: 0
-   * maximum: 10000000
-   * @return price
-   */
-  @Min(0) @Max(10000000) 
-  @Schema(name = "price", description = "цена объявления", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("price")
-  public @Nullable Integer getPrice() {
-    return price;
-  }
-
-  public void setPrice(@Nullable Integer price) {
-    this.price = price;
-  }
-
-  public CreateOrUpdateAd description(@Nullable String description) {
-    this.description = description;
-    return this;
-  }
-
-  /**
-   * описание объявления
-   * @return description
-   */
-  @Size(min = 8, max = 64) 
-  @Schema(name = "description", description = "описание объявления", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("description")
-  public @Nullable String getDescription() {
-    return description;
-  }
-
-  public void setDescription(@Nullable String description) {
-    this.description = description;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
+    public CreateOrUpdateAd title(@Nullable String title) {
+        this.title = title;
+        return this;
     }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
+
+    /**
+     * заголовок объявления
+     *
+     * @return title
+     */
+    @Size(min = 4, max = 32)
+    @Schema(name = "title", description = "заголовок объявления", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+    @JsonProperty("title")
+    public @Nullable String getTitle() {
+        return title;
     }
-    CreateOrUpdateAd createOrUpdateAd = (CreateOrUpdateAd) o;
-    return Objects.equals(this.title, createOrUpdateAd.title) &&
-        Objects.equals(this.price, createOrUpdateAd.price) &&
-        Objects.equals(this.description, createOrUpdateAd.description);
-  }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(title, price, description);
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class CreateOrUpdateAd {\n");
-    sb.append("    title: ").append(toIndentedString(title)).append("\n");
-    sb.append("    price: ").append(toIndentedString(price)).append("\n");
-    sb.append("    description: ").append(toIndentedString(description)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
-
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(Object o) {
-    if (o == null) {
-      return "null";
+    public void setTitle(@Nullable String title) {
+        this.title = title;
     }
-    return o.toString().replace("\n", "\n    ");
-  }
+
+    public CreateOrUpdateAd price(@Nullable Integer price) {
+        this.price = price;
+        return this;
+    }
+
+    /**
+     * цена объявления
+     * minimum: 0
+     * maximum: 10000000
+     *
+     * @return price
+     */
+    @Min(0)
+    @Max(10000000)
+    @Schema(name = "price", description = "цена объявления", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+    @JsonProperty("price")
+    public @Nullable Integer getPrice() {
+        return price;
+    }
+
+    public void setPrice(@Nullable Integer price) {
+        this.price = price;
+    }
+
+    public CreateOrUpdateAd description(@Nullable String description) {
+        this.description = description;
+        return this;
+    }
+
+    /**
+     * описание объявления
+     *
+     * @return description
+     */
+    @Size(min = 8, max = 64)
+    @Schema(name = "description", description = "описание объявления", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+    @JsonProperty("description")
+    public @Nullable String getDescription() {
+        return description;
+    }
+
+    public void setDescription(@Nullable String description) {
+        this.description = description;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        CreateOrUpdateAd createOrUpdateAd = (CreateOrUpdateAd) o;
+        return Objects.equals(this.title, createOrUpdateAd.title) &&
+                Objects.equals(this.price, createOrUpdateAd.price) &&
+                Objects.equals(this.description, createOrUpdateAd.description);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, price, description);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("class CreateOrUpdateAd {\n");
+        sb.append("    title: ").append(toIndentedString(title)).append("\n");
+        sb.append("    price: ").append(toIndentedString(price)).append("\n");
+        sb.append("    description: ").append(toIndentedString(description)).append("\n");
+        sb.append("}");
+        return sb.toString();
+    }
+
+    /**
+     * Convert the given object to string with each line indented by 4 spaces
+     * (except the first line).
+     */
+    private String toIndentedString(Object o) {
+        if (o == null) {
+            return "null";
+        }
+        return o.toString().replace("\n", "\n    ");
+    }
 }
 

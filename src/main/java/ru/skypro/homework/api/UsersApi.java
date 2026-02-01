@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -87,9 +88,10 @@ public interface UsersApi {
     )
     
     default ResponseEntity<Void> setPassword(
-        @Parameter(name = "NewPassword", description = "") @Valid @RequestBody(required = false) @Nullable NewPassword newPassword
+        @Parameter(name = "NewPassword", description = "") @Valid @RequestBody(required = false) @Nullable NewPassword newPassword,
+        Authentication authentication
     ) {
-        return getDelegate().setPassword(newPassword);
+        return getDelegate().setPassword(newPassword, authentication);
     }
 
 
