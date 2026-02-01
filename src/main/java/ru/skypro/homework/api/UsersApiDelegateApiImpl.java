@@ -5,16 +5,16 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.model.NewPassword;
-import ru.skypro.homework.model.UpdateUser;
-import ru.skypro.homework.model.User;
-import ru.skypro.homework.service.UserService;
+import ru.skypro.homework.dto.NewPassword;
+import ru.skypro.homework.dto.UpdateUser;
+import ru.skypro.homework.dto.User;
+import ru.skypro.homework.service.impl.UserServiceImpl;
 
 @Service
 @RequiredArgsConstructor
 public class UsersApiDelegateApiImpl implements UsersApiDelegate {
 
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
     @Override
     public ResponseEntity<User> getUser() {

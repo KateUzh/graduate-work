@@ -1,9 +1,11 @@
-package ru.skypro.homework.api;
+package ru.skypro.homework.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
+import ru.skypro.homework.api.RegisterApi;
+import ru.skypro.homework.api.RegisterApiDelegate;
 
 import javax.annotation.Generated;
 import java.util.Optional;
@@ -12,17 +14,16 @@ import java.util.Optional;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2026-01-22T22:29:14.541627300+03:00[Europe/Moscow]", comments = "Generator version: 7.16.0")
 @Controller
 @RequestMapping("${openapi.aPIDocumentation.base-path:}")
-public class UsersApiController implements UsersApi {
+public class RegisterApiController implements RegisterApi {
 
-    private final UsersApiDelegate delegate;
+    private final RegisterApiDelegate delegate;
 
-    public UsersApiController(@Autowired(required = false) UsersApiDelegate delegate) {
-        this.delegate = Optional.ofNullable(delegate).orElse(new UsersApiDelegate() {
-        });
+    public RegisterApiController(@Autowired(required = false) RegisterApiDelegate delegate) {
+        this.delegate = Optional.ofNullable(delegate).orElse(new RegisterApiDelegate() {});
     }
 
     @Override
-    public UsersApiDelegate getDelegate() {
+    public RegisterApiDelegate getDelegate() {
         return delegate;
     }
 

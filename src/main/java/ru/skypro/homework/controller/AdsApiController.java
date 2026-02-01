@@ -1,4 +1,4 @@
-package ru.skypro.homework.api;
+package ru.skypro.homework.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,13 +9,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.model.Ad;
-import ru.skypro.homework.model.Ads;
-import ru.skypro.homework.model.Comment;
-import ru.skypro.homework.model.Comments;
-import ru.skypro.homework.model.CreateOrUpdateAd;
-import ru.skypro.homework.model.CreateOrUpdateComment;
-import ru.skypro.homework.model.ExtendedAd;
+import ru.skypro.homework.api.AdsApi;
+import ru.skypro.homework.api.AdsApiDelegate;
+import ru.skypro.homework.api.AdsApiDelegateImpl;
+import ru.skypro.homework.dto.Ad;
+import ru.skypro.homework.dto.Ads;
+import ru.skypro.homework.dto.Comment;
+import ru.skypro.homework.dto.Comments;
+import ru.skypro.homework.dto.CreateOrUpdateAd;
+import ru.skypro.homework.dto.CreateOrUpdateComment;
+import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.service.impl.AdServiceImpl;
 import ru.skypro.homework.service.impl.CommentServiceImpl;
 

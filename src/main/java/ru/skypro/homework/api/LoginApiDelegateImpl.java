@@ -3,7 +3,7 @@ package ru.skypro.homework.api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.model.Login;
+import ru.skypro.homework.dto.Login;
 import ru.skypro.homework.service.AuthService;
 
 @Service

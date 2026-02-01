@@ -4,9 +4,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 import ru.skypro.homework.entity.AdEntity;
-import ru.skypro.homework.model.Ad;
-import ru.skypro.homework.model.CreateOrUpdateAd;
-import ru.skypro.homework.model.ExtendedAd;
+import ru.skypro.homework.dto.Ad;
+import ru.skypro.homework.dto.CreateOrUpdateAd;
+import ru.skypro.homework.dto.ExtendedAd;
 
 @Mapper(
         componentModel = "spring",
