@@ -15,6 +15,7 @@ import ru.skypro.homework.model.CreateOrUpdateAd;
 import ru.skypro.homework.model.ExtendedAd;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.service.AdService;
+import ru.skypro.homework.service.ImageService;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,11 +31,15 @@ public class AdServiceImpl implements AdService {
 
     private final AdRepository adRepository;
     private final AdMapper adMapper;
+    private final ImageService imageService;
+
 
     public AdServiceImpl(AdRepository adRepository,
-                         AdMapper adMapper) {
+                         AdMapper adMapper,
+                         ImageService imageService) {
         this.adRepository = adRepository;
         this.adMapper = adMapper;
+        this.imageService = imageService;
     }
 
     @Override
@@ -180,4 +185,29 @@ public class AdServiceImpl implements AdService {
         }
         return null;
     }
+    public String saveImage(MultipartFile imageFile) {
+        String filename = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
+        Path uploadPath = Paths.get("uploads/images");
+        try {
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+            Path filePath = uploadPath.resolve(filename);
+            imageFile.transferTo(filePath);
+            return filename; // возвращаем только имя файла
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to save image");
+        }
+    }
+    public Ad updateAdImage(Integer adId, MultipartFile image, Authentication auth) {
+        AdEntity ad = adRepository.findById(adId)
+                .orElseThrow();
+
+        String filename = imageService.saveAdImage(image);
+        ad.setImage(filename);
+
+        adRepository.save(ad);
+        return adMapper.toDto(ad);
+    }
+
 }
