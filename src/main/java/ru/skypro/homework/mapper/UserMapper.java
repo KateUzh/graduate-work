@@ -22,11 +22,16 @@ public interface UserMapper {
 
     void updateFromDto(UpdateUser dto, @MappingTarget UserEntity entity);
 
+    @Mapping(target = "image", expression = "java(mapImage(entity.getImage()))")
     @Mapping(source = "role", target = "role")
     User toDto(UserEntity entity);
 
     @Mapping(source = "role", target = "role")
     UserEntity toEntity(User dto);
+
+    default String mapImage(String image) {
+        return image == null ? null : "/images/users/" + image;
+    }
 
     default UserEntity.Role map(User.RoleEnum roleEnum) {
         return roleEnum == null ? null : UserEntity.Role.valueOf(roleEnum.name());
