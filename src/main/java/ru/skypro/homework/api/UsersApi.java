@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.model.NewPassword;
-import ru.skypro.homework.model.UpdateUser;
-import ru.skypro.homework.model.User;
+import ru.skypro.homework.dto.NewPassword;
+import ru.skypro.homework.dto.UpdateUser;
+import ru.skypro.homework.dto.User;
 
 import javax.annotation.Generated;
 import javax.validation.Valid;

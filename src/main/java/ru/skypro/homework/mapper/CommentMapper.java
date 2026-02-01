@@ -4,8 +4,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 import ru.skypro.homework.entity.CommentEntity;
-import ru.skypro.homework.model.Comment;
-import ru.skypro.homework.model.CreateOrUpdateComment;
+import ru.skypro.homework.dto.Comment;
+import ru.skypro.homework.dto.CreateOrUpdateComment;
 
 @Mapper(
         componentModel = "spring",

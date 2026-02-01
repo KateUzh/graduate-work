@@ -1,4 +1,4 @@
-package ru.skypro.homework.api;
+package ru.skypro.homework.controller;
 
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -12,8 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.model.Ad;
-import ru.skypro.homework.model.CreateOrUpdateAd;
+import ru.skypro.homework.api.AdsApiDelegateImpl;
+import ru.skypro.homework.dto.Ad;
+import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.service.impl.AdServiceImpl;
 import ru.skypro.homework.service.impl.CommentServiceImpl;
 
@@ -23,14 +24,14 @@ import java.util.Optional;
 
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
-public class AdssController {
+public class AdsController {
 
     private final AdsApiDelegateImpl delegate;
     private final AdServiceImpl adService;
     private final CommentServiceImpl commentService;
 
 
-    public AdssController(AdsApiDelegateImpl delegate, AdServiceImpl adService, CommentServiceImpl commentService) {
+    public AdsController(AdsApiDelegateImpl delegate, AdServiceImpl adService, CommentServiceImpl commentService) {
         this.commentService = commentService;
         this.delegate = Optional.ofNullable(delegate).orElse(new AdsApiDelegateImpl(adService, commentService) {
         });
