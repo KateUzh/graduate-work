@@ -1,13 +1,18 @@
 package ru.skypro.homework.service.impl;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.dto.Login;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.AuthService;
 
+/**
+ * Сервис аутентификации и регистрации пользователей.
+ */
 @Service
 public class AuthServiceImpl implements AuthService {
 
@@ -20,13 +25,25 @@ public class AuthServiceImpl implements AuthService {
         this.userRepository = userRepository;
     }
 
+    /**
+     * Выполняет аутентификацию пользователя.
+     *
+     * @param login данные для входа
+     * @return {@code true}, если аутентификация прошла успешно
+     */
     @Override
     public boolean login(Login login) {
         UserEntity user = userRepository.findByEmail(login.getUsername())
-                .orElseThrow(()-> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found"));
         return encoder.matches(login.getPassword(), user.getPassword());
     }
 
+    /**
+     * Регистрирует нового пользователя.
+     *
+     * @param register данные для регистрации
+     * @return {@code true}, если регистрация прошла успешно
+     */
     @Override
     public boolean register(Register register) {
         UserEntity user = new UserEntity();
@@ -37,8 +54,8 @@ public class AuthServiceImpl implements AuthService {
         user.setPhone(register.getPhone());
         try {
             user.setRole(UserEntity.Role.valueOf(register.getRole().name()));
-        } catch (IllegalArgumentException e){
-            throw new IllegalArgumentException("Unknown role: " + register.getRole());
+        } catch (IllegalArgumentException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Unknown role: " + register.getRole());
         }
 
         userRepository.save(user);

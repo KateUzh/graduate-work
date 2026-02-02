@@ -20,6 +20,10 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Сервис для работы с комментариями.
+ * Содержит бизнес-логику добавления, получения, обновления и удаления комментариев.
+ */
 @Service
 public class CommentServiceImpl implements CommentService {
 
@@ -34,6 +38,14 @@ public class CommentServiceImpl implements CommentService {
         this.commentMapper = commentMapper;
     }
 
+    /**
+     * Добавляет комментарий к объявлению.
+     *
+     * @param adId идентификатор объявления
+     * @param dto данные комментария
+     * @param auth данные аутентификации
+     * @return добавленный комментарий
+     */
     public Comment addComment(int adId, CreateOrUpdateComment dto, Authentication auth) {
         UserEntity user = getUserFromAuth(auth);
         if (user == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
@@ -50,12 +62,19 @@ public class CommentServiceImpl implements CommentService {
         return commentMapper.toDto(saved);
     }
 
+    /**
+     * Удаляет комментарий.
+     *
+     * @param adId идентификатор объявления
+     * @param commentId идентификатор комментария
+     * @param auth данные аутентификации
+     */
     public void deleteComment(int adId, int commentId, Authentication auth) {
         UserEntity user = getUserFromAuth(auth);
         if (user == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
 
-        AdEntity adEntity = adRepository.findById(adId).orElseThrow(() ->
-                new EntityNotFoundException("Ad not found with id: " + adId));
+        AdEntity adEntity = adRepository.findById(adId)
+                .orElseThrow(() -> new EntityNotFoundException("Ad not found with id: " + adId));
 
         CommentEntity comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new EntityNotFoundException("Comment not found"));
@@ -67,6 +86,12 @@ public class CommentServiceImpl implements CommentService {
         commentRepository.deleteById(commentId);
     }
 
+    /**
+     * Получает список комментариев для объявления.
+     *
+     * @param adId идентификатор объявления
+     * @return объект Comments с результатами
+     */
     @Override
     public Comments getComments(Integer adId) {
         List<Comment> result = commentRepository.findAllByAdId(adId)
@@ -79,13 +104,21 @@ public class CommentServiceImpl implements CommentService {
                 .results(result);
     }
 
+    /**
+     * Обновляет комментарий.
+     *
+     * @param adId идентификатор объявления
+     * @param commentId идентификатор комментария
+     * @param dto новые данные комментария
+     * @param auth данные аутентификации
+     * @return обновленный комментарий
+     */
     public Comment updateComment(int adId, int commentId, CreateOrUpdateComment dto, Authentication auth) {
         UserEntity user = getUserFromAuth(auth);
         if (user == null) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
 
-        AdEntity adEntity = adRepository.findById(adId).orElseThrow(() ->
-                new EntityNotFoundException("Ad not found with id: " + adId));
-
+        AdEntity adEntity = adRepository.findById(adId)
+                .orElseThrow(() -> new EntityNotFoundException("Ad not found with id: " + adId));
 
         CommentEntity comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new EntityNotFoundException("Comment not found"));
@@ -101,6 +134,12 @@ public class CommentServiceImpl implements CommentService {
         return commentMapper.toDto(comment);
     }
 
+    /**
+     * Получает пользователя из объекта Authentication.
+     *
+     * @param auth объект аутентификации
+     * @return пользователь или null, если не авторизован
+     */
     private UserEntity getUserFromAuth(Authentication auth) {
         if (auth == null || !auth.isAuthenticated()) return null;
         Object principal = auth.getPrincipal();

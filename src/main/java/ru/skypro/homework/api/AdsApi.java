@@ -32,7 +32,6 @@ import ru.skypro.homework.dto.ExtendedAd;
 import javax.annotation.Generated;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2026-01-22T22:29:14.541627300+03:00[Europe/Moscow]", comments = "Generator version: 7.16.0")
 @Validated
@@ -435,7 +434,7 @@ public interface AdsApi {
     )
 
     @PatchMapping(value = AdsApi.PATH_UPDATE_IMAGE, consumes = "multipart/form-data", produces = MediaType.APPLICATION_JSON_VALUE)
-    default ResponseEntity<List<byte[]>> updateImage(
+    default ResponseEntity<Ad> updateImage(
             @NotNull @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH) @PathVariable("id") Integer id,
             @Parameter(name = "image", description = "", required = true) @RequestParam("image") MultipartFile image,
             Authentication auth

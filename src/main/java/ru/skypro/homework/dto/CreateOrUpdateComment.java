@@ -9,34 +9,45 @@ import javax.validation.constraints.Size;
 import java.util.Objects;
 
 /**
- * CreateOrUpdateComment
+ * DTO для создания или обновления комментария.
+ * Содержит текст комментария.
  */
-
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2026-01-22T22:29:14.541627300+03:00[Europe/Moscow]", comments = "Generator version: 7.16.0")
 public class CreateOrUpdateComment {
 
     private String text;
 
+    /**
+     * Пустой конструктор.
+     */
     public CreateOrUpdateComment() {
         super();
     }
 
     /**
-     * Constructor with only required parameters
+     * Конструктор с обязательными параметрами.
+     *
+     * @param text текст комментария
      */
     public CreateOrUpdateComment(String text) {
         this.text = text;
     }
 
+    /**
+     * Fluent-метод для установки текста комментария.
+     *
+     * @param text текст комментария
+     * @return текущий объект CreateOrUpdateComment
+     */
     public CreateOrUpdateComment text(String text) {
         this.text = text;
         return this;
     }
 
     /**
-     * текст комментария
+     * Возвращает текст комментария.
      *
-     * @return text
+     * @return текст комментария
      */
     @NotNull
     @Size(min = 8, max = 64)
@@ -46,20 +57,21 @@ public class CreateOrUpdateComment {
         return text;
     }
 
+    /**
+     * Устанавливает текст комментария.
+     *
+     * @param text текст комментария
+     */
     public void setText(String text) {
         this.text = text;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        CreateOrUpdateComment createOrUpdateComment = (CreateOrUpdateComment) o;
-        return Objects.equals(this.text, createOrUpdateComment.text);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CreateOrUpdateComment that = (CreateOrUpdateComment) o;
+        return Objects.equals(text, that.text);
     }
 
     @Override
@@ -77,14 +89,13 @@ public class CreateOrUpdateComment {
     }
 
     /**
-     * Convert the given object to string with each line indented by 4 spaces
-     * (except the first line).
+     * Преобразует объект в строку с отступами.
+     *
+     * @param o объект
+     * @return форматированная строка
      */
     private String toIndentedString(Object o) {
-        if (o == null) {
-            return "null";
-        }
+        if (o == null) return "null";
         return o.toString().replace("\n", "\n    ");
     }
 }
-

@@ -1,6 +1,5 @@
 package ru.skypro.homework.filter;
 
-
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -10,15 +9,28 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Фильтр, добавляющий заголовок CORS для поддержки кросс-доменных запросов
+ * с включением передачи учётных данных (credentials).
+ */
 @Component
 public class BasicAuthCorsFilter extends OncePerRequestFilter {
 
+    /**
+     * Добавляет заголовок Access-Control-Allow-Credentials к каждому HTTP-ответу.
+     *
+     * @param request  HTTP-запрос
+     * @param response HTTP-ответ
+     * @param filterChain цепочка фильтров
+     * @throws ServletException при ошибке сервлета
+     * @throws IOException при ошибке ввода/вывода
+     */
     @Override
-    protected void doFilterInternal(HttpServletRequest httpServletRequest,
-                                    HttpServletResponse httpServletResponse,
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
                                     FilterChain filterChain)
             throws ServletException, IOException {
-        httpServletResponse.addHeader("Access-Control-Allow-Credentials", "true");
-        filterChain.doFilter(httpServletRequest, httpServletResponse);
+        response.addHeader("Access-Control-Allow-Credentials", "true");
+        filterChain.doFilter(request, response);
     }
 }
