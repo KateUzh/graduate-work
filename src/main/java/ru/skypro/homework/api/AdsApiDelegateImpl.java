@@ -82,7 +82,7 @@ public class AdsApiDelegateImpl implements AdsApiDelegate {
     }
 
     @Override
-    public ResponseEntity<List<byte[]>> updateImage(Integer id, MultipartFile image, Authentication auth) {
-        return ResponseEntity.ok(adService.updateImage(id, image, auth));
+    public ResponseEntity<Ad> updateImage(Integer id, MultipartFile image, Authentication auth) {
+        return ResponseEntity.ok(adService.updateAdImage(id, image, auth));
     }
 }

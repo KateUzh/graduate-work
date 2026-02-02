@@ -10,6 +10,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.UUID;
 
+/**
+ * Сервис для работы с изображениями пользователей и объявлений.
+ * Отвечает за сохранение и загрузку изображений.
+ */
 @Service
 public class ImageServiceImpl implements ImageService {
 

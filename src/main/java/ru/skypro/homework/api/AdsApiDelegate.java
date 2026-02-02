@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.controller.AdsApiController;
 import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.Comment;
@@ -263,7 +262,7 @@ public interface AdsApiDelegate {
      * or Not found (status code 404)
      * @see AdsApi#updateImage
      */
-    default ResponseEntity<List<byte[]>> updateImage(Integer id,
+    default ResponseEntity<Ad> updateImage(Integer id,
                                                      MultipartFile image, Authentication authentication) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType : MediaType.parseMediaTypes(request.getHeader("Accept"))) {

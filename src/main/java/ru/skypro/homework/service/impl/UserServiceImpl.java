@@ -17,6 +17,10 @@ import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UserService;
 
+/**
+ * Сервис для работы с пользователями.
+ * Содержит бизнес-логику получения и обновления профиля, смены пароля и обновления изображения профиля.
+ */
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
@@ -36,6 +40,12 @@ public class UserServiceImpl implements UserService {
         this.imageService = imageService;
     }
 
+    /**
+     * Получает профиль текущего пользователя.
+     *
+     * @param auth данные аутентификации
+     * @return DTO пользователя
+     */
     @Override
     public User getCurrentUser(Authentication auth) {
         UserEntity user = getUserFromAuth(auth);
@@ -45,6 +55,13 @@ public class UserServiceImpl implements UserService {
         return userMapper.toDto(user);
     }
 
+    /**
+     * Обновляет профиль текущего пользователя.
+     *
+     * @param updateUser новые данные
+     * @param auth       данные аутентификации
+     * @return обновленный профиль
+     */
     @Override
     public User updateUser(UpdateUser updateUser, Authentication auth) {
         UserEntity user = getUserFromAuth(auth);
@@ -56,6 +73,12 @@ public class UserServiceImpl implements UserService {
         return userMapper.toDto(userRepository.save(user));
     }
 
+    /**
+     * Меняет пароль текущего пользователя.
+     *
+     * @param newPassword новые данные пароля
+     * @param auth        данные аутентификации
+     */
     @Override
     public void changePassword(NewPassword newPassword, Authentication auth) {
         UserEntity user = getUserFromAuth(auth);
@@ -67,6 +90,12 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
+    /**
+     * Обновляет изображение профиля пользователя.
+     *
+     * @param image файл изображения
+     * @param auth  данные аутентификации
+     */
     @Override
     public void updateUserImage(MultipartFile image, Authentication auth) {
         UserEntity user = getUserFromAuth(auth);

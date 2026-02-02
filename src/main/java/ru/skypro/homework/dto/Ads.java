@@ -11,9 +11,9 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Ads
+ * DTO для списка объявлений (Ads).
+ * Содержит общее количество объявлений и список объектов Ad.
  */
-
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2026-01-22T22:29:14.541627300+03:00[Europe/Moscow]", comments = "Generator version: 7.16.0")
 public class Ads {
 
@@ -22,32 +22,54 @@ public class Ads {
     @Valid
     private List<@Valid Ad> results = new ArrayList<>();
 
+    /**
+     * Устанавливает общее количество объявлений.
+     *
+     * @param count общее количество объявлений
+     * @return текущий объект Ads
+     */
     public Ads count(@Nullable Integer count) {
         this.count = count;
         return this;
     }
 
     /**
-     * общее количество объявлений
+     * Возвращает общее количество объявлений.
      *
-     * @return count
+     * @return общее количество объявлений
      */
-
     @Schema(name = "count", description = "общее количество объявлений", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
     @JsonProperty("count")
     public @Nullable Integer getCount() {
         return count;
     }
 
+    /**
+     * Устанавливает общее количество объявлений.
+     *
+     * @param count общее количество объявлений
+     */
     public void setCount(@Nullable Integer count) {
         this.count = count;
     }
 
+    /**
+     * Устанавливает список объявлений.
+     *
+     * @param results список объявлений
+     * @return текущий объект Ads
+     */
     public Ads results(List<@Valid Ad> results) {
         this.results = results;
         return this;
     }
 
+    /**
+     * Добавляет одно объявление в список results.
+     *
+     * @param resultsItem объявление для добавления
+     * @return текущий объект Ads
+     */
     public Ads addResultsItem(Ad resultsItem) {
         if (this.results == null) {
             this.results = new ArrayList<>();
@@ -57,9 +79,9 @@ public class Ads {
     }
 
     /**
-     * Get results
+     * Возвращает список объявлений.
      *
-     * @return results
+     * @return список объявлений
      */
     @Valid
     @Schema(name = "results", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
@@ -68,21 +90,22 @@ public class Ads {
         return results;
     }
 
+    /**
+     * Устанавливает список объявлений.
+     *
+     * @param results список объявлений
+     */
     public void setResults(List<@Valid Ad> results) {
         this.results = results;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         Ads ads = (Ads) o;
-        return Objects.equals(this.count, ads.count) &&
-                Objects.equals(this.results, ads.results);
+        return Objects.equals(count, ads.count) &&
+                Objects.equals(results, ads.results);
     }
 
     @Override
@@ -101,14 +124,13 @@ public class Ads {
     }
 
     /**
-     * Convert the given object to string with each line indented by 4 spaces
-     * (except the first line).
+     * Преобразует объект в строку с отступами для удобного форматирования.
+     *
+     * @param o объект для преобразования
+     * @return отформатированная строка
      */
     private String toIndentedString(Object o) {
-        if (o == null) {
-            return "null";
-        }
+        if (o == null) return "null";
         return o.toString().replace("\n", "\n    ");
     }
 }
-
