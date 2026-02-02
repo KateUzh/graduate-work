@@ -1,5 +1,8 @@
 package ru.skypro.homework.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -8,8 +11,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
+/**
+ * Сущность комментария к объявлению.
+ * Содержит текст комментария, дату создания,
+ * ссылку на автора и объявление.
+ */
+@Setter
+@Getter
 @Entity
 @Table(name = "comments")
 public class CommentEntity {
@@ -32,43 +43,11 @@ public class CommentEntity {
     @JoinColumn(name = "ad_id", nullable = false)
     private AdEntity ad;
 
-    public Integer getId() {
-        return id;
+    @PrePersist
+    private void onCreate() {
+        if (createdAt == null) {
+            createdAt = System.currentTimeMillis();
+        }
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public Long getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Long createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public UserEntity getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(UserEntity author) {
-        this.author = author;
-    }
-
-    public AdEntity getAd() {
-        return ad;
-    }
-
-    public void setAd(AdEntity ad) {
-        this.ad = ad;
-    }
 }

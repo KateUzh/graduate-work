@@ -6,33 +6,31 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import ru.skypro.homework.config.CustomUserDetails;
-import ru.skypro.homework.entity.AdEntity;
-import ru.skypro.homework.entity.UserEntity;
-import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
+import ru.skypro.homework.entity.AdEntity;
+import ru.skypro.homework.entity.UserEntity;
+import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.service.ImageService;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
+/**
+ * Сервис для работы с объявлениями.
+ * Содержит бизнес-логику создания, получения, обновления и удаления объявлений.
+ * Реализует проверку прав доступа пользователей.
+ */
 @Service
 public class AdServiceImpl implements AdService {
 
     private final AdRepository adRepository;
     private final AdMapper adMapper;
     private final ImageService imageService;
-
 
     public AdServiceImpl(AdRepository adRepository,
                          AdMapper adMapper,
@@ -42,139 +40,181 @@ public class AdServiceImpl implements AdService {
         this.imageService = imageService;
     }
 
+    /**
+     * Создает новое объявление от имени авторизованного пользователя.
+     *
+     * @param properties данные объявления
+     * @param image      изображение объявления
+     * @param auth       данные аутентификации пользователя
+     * @return созданное объявление в виде DTO
+     */
     @Override
-    public Ad createAd(CreateOrUpdateAd properties, MultipartFile imageFile, Authentication auth) {
+    public Ad createAd(CreateOrUpdateAd properties, MultipartFile image, Authentication auth) {
         UserEntity user = getUserFromAuth(auth);
         if (user == null) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
-        AdEntity adEntity = adMapper.toAdEntity(properties);
-        adEntity.setAuthor(user);
-        if (imageFile != null && !imageFile.isEmpty()) {
-            try {
-                String filename = UUID.randomUUID() + "_" + imageFile.getOriginalFilename();
-                Path uploadPath = Paths.get("uploads/images/ads");
-                if (!Files.exists(uploadPath)) {
-                    Files.createDirectories(uploadPath);
-                }
-                Path filePath = uploadPath.resolve(filename);
-                try (InputStream inputStream = imageFile.getInputStream()) {
-                    imageFile.transferTo(filePath);
-                }
-                adEntity.setImage("/images/ads/" + filename);
-            } catch (IOException e) {
-                e.printStackTrace();
-                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+
+        AdEntity ad = adMapper.toAdEntity(properties);
+        ad.setAuthor(user);
+
+        if (image != null && !image.isEmpty()) {
+            String filename = imageService.saveAdImage(image);
+            ad.setImage(filename);
         }
-        adRepository.save(adEntity);
-        Ad ad = adMapper.toDto(adEntity);
-        return ad;
+
+        adRepository.save(ad);
+        return adMapper.toDto(ad);
     }
 
+    /**
+     * Получает все объявления.
+     *
+     * @return объект Ads с полным списком объявлений
+     */
     @Override
     public Ads getAllAds() {
-        List<Ad> ad = adRepository.findAll()
+        List<Ad> results = adRepository.findAll()
                 .stream()
                 .map(adMapper::toDto)
                 .collect(Collectors.toList());
+
         Ads ads = new Ads();
-        ads.setCount(ad.size());
-        ads.results(ad);
+        ads.setCount(results.size());
+        ads.setResults(results);
         return ads;
     }
 
+    /**
+     * Получает расширенную информацию об объявлении по ID.
+     *
+     * @param id идентификатор объявления
+     * @return расширенное объявление
+     */
     @Override
     public ExtendedAd getAd(Integer id) {
-        AdEntity ad = adRepository.findById(id).orElseThrow(NullPointerException::new);
+        AdEntity ad = adRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         return adMapper.toExtendedAd(ad);
     }
 
+    /**
+     * Получает объявления текущего пользователя.
+     *
+     * @param auth данные аутентификации
+     * @return объект Ads с объявлениями пользователя
+     */
     public Ads getMyAds(Authentication auth) {
         UserEntity user = getUserFromAuth(auth);
         if (user == null) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
 
-        List<AdEntity> allByAuthorId = adRepository.findAllByAuthorId(user.getId());
-        List<Ad> adsList = allByAuthorId.stream()
+        List<Ad> results = adRepository.findAllByAuthorId(user.getId())
+                .stream()
                 .map(adMapper::toDto)
                 .collect(Collectors.toList());
 
         Ads ads = new Ads();
-        ads.setCount(adsList.size());
-        ads.setResults(adsList);
-
+        ads.setCount(results.size());
+        ads.setResults(results);
         return ads;
     }
 
+    /**
+     * Удаляет объявление по ID.
+     * Разрешено владельцу объявления или пользователю с ролью ADMIN.
+     *
+     * @param id   идентификатор объявления
+     * @param auth данные аутентификации
+     */
     public void removeAd(Integer id, Authentication auth) {
         UserEntity user = getUserFromAuth(auth);
         if (user == null) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
 
-        AdEntity adEntity = adRepository.findById(id).orElseThrow(NullPointerException::new);
-        if (!UserEntity.Role.ADMIN.equals(user.getRole()) || !adEntity.getAuthor().getId().equals(user.getId())) {
+        AdEntity ad = adRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if (!UserEntity.Role.ADMIN.equals(user.getRole())
+                && !ad.getAuthor().getId().equals(user.getId())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
-        adRepository.deleteById(id);
+
+        adRepository.delete(ad);
     }
 
-    public Ad updateAds(Integer id, CreateOrUpdateAd createOrUpdateAd, Authentication auth) {
+    /**
+     * Обновляет объявление.
+     * Разрешено владельцу объявления или пользователю с ролью ADMIN.
+     *
+     * @param id  идентификатор объявления
+     * @param dto новые данные объявления
+     * @param auth данные аутентификации
+     * @return обновленное объявление в виде DTO
+     */
+    public Ad updateAds(Integer id, CreateOrUpdateAd dto, Authentication auth) {
         UserEntity user = getUserFromAuth(auth);
         if (user == null) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
 
-        AdEntity adEntity = adRepository.findById(id).orElseThrow(NullPointerException::new);
+        AdEntity ad = adRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        if (!UserEntity.Role.ADMIN.equals(user.getRole()) || !adEntity.getAuthor().getId().equals(user.getId())) {
+        if (!UserEntity.Role.ADMIN.equals(user.getRole())
+                && !ad.getAuthor().getId().equals(user.getId())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
-        adEntity.setTitle(createOrUpdateAd.getTitle());
-        adEntity.setPrice(createOrUpdateAd.getPrice());
-        adEntity.setDescription(createOrUpdateAd.getDescription());
 
-        adRepository.save(adEntity);
-        return adMapper.toDto(adEntity);
+        ad.setTitle(dto.getTitle());
+        ad.setPrice(dto.getPrice());
+        ad.setDescription(dto.getDescription());
+
+        adRepository.save(ad);
+        return adMapper.toDto(ad);
     }
 
-    public List<byte[]> updateImage(Integer id, MultipartFile imageFile, Authentication auth) {
+    /**
+     * Обновляет изображение объявления.
+     *
+     * @param id    идентификатор объявления
+     * @param image новое изображение
+     * @param auth  данные аутентификации
+     * @return обновленное объявление в виде DTO
+     */
+    public Ad updateAdImage(Integer id, MultipartFile image, Authentication auth) {
         UserEntity user = getUserFromAuth(auth);
         if (user == null) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
 
-        AdEntity adEntity = adRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        AdEntity ad = adRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        if (!UserEntity.Role.ADMIN.equals(user.getRole()) || !adEntity.getAuthor().getId().equals(user.getId())) {
+        if (!UserEntity.Role.ADMIN.equals(user.getRole())
+                && !ad.getAuthor().getId().equals(user.getId())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
 
-        if (imageFile == null || imageFile.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Image is empty");
+        if (image == null || image.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
-        try {
-            String filename = UUID.randomUUID() + "_" + imageFile.getOriginalFilename();
-            Path uploadPath = Paths.get("uploads/images/ads");
-            if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
-            }
+        String filename = imageService.saveAdImage(image);
+        ad.setImage(filename);
 
-            Path filePath = uploadPath.resolve(filename);
-            imageFile.transferTo(filePath);
-            adEntity.setImage(filePath.toString());
-            adRepository.save(adEntity);
-
-            byte[] bytes = Files.readAllBytes(filePath);
-            return List.of(bytes);
-        } catch (IOException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to upload image", e);
-        }
+        adRepository.save(ad);
+        return adMapper.toDto(ad);
     }
 
+    /**
+     * Извлекает пользователя из объекта Authentication.
+     *
+     * @param auth объект аутентификации
+     * @return пользователь или null, если не авторизован
+     */
     private UserEntity getUserFromAuth(Authentication auth) {
         if (auth == null || !auth.isAuthenticated()) {
             return null;
@@ -185,29 +225,4 @@ public class AdServiceImpl implements AdService {
         }
         return null;
     }
-    public String saveImage(MultipartFile imageFile) {
-        String filename = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
-        Path uploadPath = Paths.get("uploads/images");
-        try {
-            if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
-            }
-            Path filePath = uploadPath.resolve(filename);
-            imageFile.transferTo(filePath);
-            return filename; // возвращаем только имя файла
-        } catch (IOException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to save image");
-        }
-    }
-    public Ad updateAdImage(Integer adId, MultipartFile image, Authentication auth) {
-        AdEntity ad = adRepository.findById(adId)
-                .orElseThrow();
-
-        String filename = imageService.saveAdImage(image);
-        ad.setImage(filename);
-
-        adRepository.save(ad);
-        return adMapper.toDto(ad);
-    }
-
 }

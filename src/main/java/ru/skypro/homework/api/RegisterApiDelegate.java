@@ -3,7 +3,6 @@ package ru.skypro.homework.api;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.NativeWebRequest;
-import ru.skypro.homework.controller.RegisterApiController;
 import ru.skypro.homework.dto.Register;
 
 import javax.annotation.Generated;
