@@ -19,8 +19,6 @@ import javax.persistence.Table;
  * Содержит текст комментария, дату создания,
  * ссылку на автора и объявление.
  */
-@Setter
-@Getter
 @Entity
 @Table(name = "comments")
 public class CommentEntity {
@@ -50,4 +48,43 @@ public class CommentEntity {
         }
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public Long getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Long createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public UserEntity getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(UserEntity author) {
+        this.author = author;
+    }
+
+    public AdEntity getAd() {
+        return ad;
+    }
+
+    public void setAd(AdEntity ad) {
+        this.ad = ad;
+    }
 }
