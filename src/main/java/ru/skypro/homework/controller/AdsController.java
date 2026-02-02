@@ -38,12 +38,12 @@ public class AdsController {
         this.adService = adService;
     }
 
-    @PostMapping(value = "/v1/adss", consumes = "multipart/form-data")
+    @PostMapping(value = "/ads", consumes = "multipart/form-data")
     public ResponseEntity<Ad> addAd(CreateOrUpdateAd properties, @RequestParam("image") MultipartFile image, Authentication auth) {
         return delegate.addAd(properties, image, auth);
     }
 
-    @PatchMapping(value = "/v1/adss/{id}/image", consumes = "multipart/form-data", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PatchMapping(value = "/ads/{id}/image", consumes = "multipart/form-data", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Ad> updateImage(
             @NotNull @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH) @PathVariable("id") Integer id,
             @Parameter(name = "image", description = "", required = true) @RequestParam("image") MultipartFile image,
