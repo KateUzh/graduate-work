@@ -27,7 +27,9 @@ public interface CommentMapper {
     @Mapping(source = "id", target = "pk")
     @Mapping(source = "author.id", target = "author")
     @Mapping(source = "author.firstName", target = "authorFirstName")
-    @Mapping(source = "author.image", target = "authorImage")
+    @Mapping(target = "authorImage",
+            expression = "java(entity.getAuthor().getImage() == null ? null : \"/images/users/\" + entity.getAuthor().getImage())"
+    )
     Comment toDto(CommentEntity entity);
 
     /**
