@@ -22,6 +22,10 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * REST контроллер для работы с объявлениями.
+ * Предоставляет дополнительные endpoints для создания и обновления объявлений.
+ */
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 public class AdsController {
@@ -30,7 +34,13 @@ public class AdsController {
     private final AdServiceImpl adService;
     private final CommentServiceImpl commentService;
 
-
+    /**
+     * Конструктор контроллера объявлений.
+     *
+     * @param delegate делегат для обработки запросов
+     * @param adService сервис для работы с объявлениями
+     * @param commentService сервис для работы с комментариями
+     */
     public AdsController(AdsApiDelegateImpl delegate, AdServiceImpl adService, CommentServiceImpl commentService) {
         this.commentService = commentService;
         this.delegate = Optional.ofNullable(delegate).orElse(new AdsApiDelegateImpl(adService, commentService) {
@@ -38,15 +48,31 @@ public class AdsController {
         this.adService = adService;
     }
 
+    /**
+     * Создает новое объявление с изображением.
+     *
+     * @param properties данные объявления (название, цена, описание)
+     * @param image изображение объявления
+     * @param auth данные аутентификации текущего пользователя
+     * @return созданное объявление
+     */
     @PostMapping(value = "/v1/adss", consumes = "multipart/form-data")
     public ResponseEntity<Ad> addAd(CreateOrUpdateAd properties, @RequestParam("image") MultipartFile image, Authentication auth) {
         return delegate.addAd(properties, image, auth);
     }
 
+    /**
+     * Обновляет изображение объявления.
+     *
+     * @param id идентификатор объявления
+     * @param image новое изображение
+     * @param auth данные аутентификации текущего пользователя
+     * @return обновленное объявление
+     */
     @PatchMapping(value = "/v1/ads/{id}/image", consumes = "multipart/form-data", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Ad> updateImage(
-            @NotNull @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH) @PathVariable("id") Integer id,
-            @Parameter(name = "image", description = "", required = true) @RequestParam("image") MultipartFile image,
+            @NotNull @Parameter(name = "id", description = "Идентификатор объявления", required = true, in = ParameterIn.PATH) @PathVariable("id") Integer id,
+            @Parameter(name = "image", description = "Новое изображение объявления", required = true) @RequestParam("image") MultipartFile image,
             Authentication auth
     ) {
         return delegate.updateImage(id, image, auth);
