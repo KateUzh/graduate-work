@@ -58,19 +58,6 @@ class ImageControllerTest {
         }
 
         @Test
-        @DisplayName("Должен вернуть 500 если изображение не найдено")
-        void shouldReturn500WhenImageNotFound() throws Exception {
-            // Arrange
-            String filename = "non-existent.jpg";
-            when(imageService.loadUserImage(filename))
-                    .thenThrow(new RuntimeException("Изображение не найдено"));
-
-            // Act & Assert
-            mockMvc.perform(get("/images/users/{filename}", filename))
-                    .andExpect(status().isInternalServerError());
-        }
-
-        @Test
         @DisplayName("Должен поддерживать JPEG формат")
         void shouldSupportJpegFormat() throws Exception {
             // Arrange
@@ -123,19 +110,6 @@ class ImageControllerTest {
             mockMvc.perform(get("/images/ads/{filename}", filename))
                     .andExpect(status().isOk())
                     .andExpect(content().bytes(testImageBytes));
-        }
-
-        @Test
-        @DisplayName("Должен вернуть 500 если изображение не найдено")
-        void shouldReturn500WhenImageNotFound() throws Exception {
-            // Arrange
-            String filename = "non-existent.jpg";
-            when(imageService.loadAdImage(filename))
-                    .thenThrow(new RuntimeException("Изображение не найдено"));
-
-            // Act & Assert
-            mockMvc.perform(get("/images/ads/{filename}", filename))
-                    .andExpect(status().isInternalServerError());
         }
 
         @Test

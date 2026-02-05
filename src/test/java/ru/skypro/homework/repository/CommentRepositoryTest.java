@@ -189,6 +189,7 @@ class CommentRepositoryTest {
         // Arrange
         AdEntity anotherAd = new AdEntity();
         anotherAd.setTitle("Другое объявление");
+        anotherAd.setDescription("Второе объявление");
         anotherAd.setPrice(100000);
         anotherAd.setAuthor(testUser);
         entityManager.persist(anotherAd);

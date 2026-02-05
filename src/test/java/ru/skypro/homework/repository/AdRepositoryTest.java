@@ -58,12 +58,14 @@ class AdRepositoryTest {
         AdEntity ad1 = new AdEntity();
         ad1.setTitle("Объявление 1");
         ad1.setPrice(100000);
+        ad1.setDescription("Sell apple");
         ad1.setAuthor(testUser);
         entityManager.persist(ad1);
 
         AdEntity ad2 = new AdEntity();
         ad2.setTitle("Объявление 2");
         ad2.setPrice(200000);
+        ad2.setDescription("Sell orange");
         ad2.setAuthor(testUser);
         entityManager.persist(ad2);
 
@@ -163,6 +165,7 @@ class AdRepositoryTest {
 
         AdEntity ad2 = new AdEntity();
         ad2.setTitle("Продам квартиру");
+        ad2.setDescription("Трёхкомнатная");
         ad2.setPrice(3000000);
         ad2.setAuthor(testUser);
         entityManager.persist(ad2);
